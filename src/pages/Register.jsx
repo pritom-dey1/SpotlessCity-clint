@@ -2,10 +2,13 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import Swal from "sweetalert2"
 import { auth, googleProvider } from "../Config/firebase.config.js"
+import { FcGoogle } from "react-icons/fc"
+
 import {
   createUserWithEmailAndPassword,
   updateProfile,
-  signInWithPopup
+  signInWithPopup,
+  signOut
 } from "firebase/auth"
 
 export default function Register() {
@@ -37,7 +40,11 @@ export default function Register() {
 
     const errorMsg = validatePassword(password)
     if (errorMsg)
-      return Swal.fire({ icon: "error", title: "Invalid Password", text: errorMsg })
+      return Swal.fire({
+        icon: "error",
+        title: "Invalid Password",
+        text: errorMsg
+      })
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -51,13 +58,15 @@ export default function Register() {
         photoURL
       })
 
-      Swal.fire({
-        icon: "success",
-        title: "Registration Successful!",
-        timer: 2000,
-        showConfirmButton: false
-      })
-      navigate("/login")
+await signOut(auth)
+await Swal.fire({
+  icon: "success",
+  title: "Registration Successful!",
+  text: "Please login to continue.",
+  timer: 2000,
+  showConfirmButton: false
+})
+navigate("/login")
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -76,7 +85,7 @@ export default function Register() {
         timer: 2000,
         showConfirmButton: false
       })
-      navigate("/login")
+      navigate("/")
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -140,17 +149,21 @@ export default function Register() {
           <span className="text-gray-600 dark:text-gray-300 text-sm">
             Already have an account?
           </span>
-          <Link to="/login" className="text-green-600 dark:text-green-400 text-sm font-semibold">
+          <Link
+            to="/login"
+            className="text-green-600 dark:text-green-400 text-sm font-semibold"
+          >
             Login
           </Link>
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-6">
           <button
             onClick={handleGoogleLogin}
-            className="w-full py-2 border border-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
+            className="flex items-center justify-center gap-3 w-full border py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
           >
-            Continue with Google
+            <FcGoogle size={22} />
+            <span>Continue with Google</span>
           </button>
         </div>
       </div>

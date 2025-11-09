@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
-import { auth, googleProvider } from "../../firebase/config"
-import { toast } from "react-hot-toast"
-import { useNavigate, Link } from "react-router-dom"
+import { auth, googleProvider } from "../Config/firebase.config.js"
+import Swal from "sweetalert2"
+import { useNavigate, Link } from "react-router"
 import { FcGoogle } from "react-icons/fc"
 
 export default function Login() {
@@ -12,24 +12,57 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    if (!email || !password) return toast.error("All fields are required")
+    if (!email || !password) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please enter both email and password.",
+        confirmButtonColor: "#16a34a"
+      })
+      return
+    }
 
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      toast.success("Login successful 🎉")
+      Swal.fire({
+        icon: "success",
+        title: "Welcome Back 🎉",
+        text: "Login successful!",
+        timer: 1500,
+        showConfirmButton: false
+      })
       navigate("/")
     } catch (err) {
-      toast.error(err.message.includes("auth/invalid-credential") ? "Invalid credentials" : "Login failed")
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text:
+          err.message.includes("auth/invalid-credential") ||
+          err.message.includes("auth/invalid-email")
+            ? "Invalid email or password. Try again!"
+            : "Something went wrong, please try later.",
+        confirmButtonColor: "#dc2626"
+      })
     }
   }
 
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider)
-      toast.success("Logged in with Google")
+      Swal.fire({
+        icon: "success",
+        title: "Logged in with Google",
+        timer: 1500,
+        showConfirmButton: false
+      })
       navigate("/")
-    } catch (err) {
-      toast.error("Google login failed")
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Google Login Failed",
+        text: "Please try again later.",
+        confirmButtonColor: "#dc2626"
+      })
     }
   }
 
@@ -37,12 +70,14 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
-          Welcome Back 👋
+          LOGIN HERE
         </h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-gray-700 dark:text-gray-300 mb-1">Email</label>
+            <label className="block text-gray-700 dark:text-gray-300 mb-1">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -53,7 +88,9 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-gray-700 dark:text-gray-300 mb-1">Password</label>
+            <label className="block text-gray-700 dark:text-gray-300 mb-1">
+              Password
+            </label>
             <input
               type="password"
               value={password}
