@@ -7,23 +7,34 @@ import jsPDF from "jspdf"
 export default function MyContributionPage() {
   const { user } = useAuth()
   const [contributions, setContributions] = useState([])
+  console.log(contributions);
   const [loading, setLoading] = useState(true)
 
-useEffect(() => {
-  if (!user) return
-  const fetchContributions = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/contributions/user/${user.email}`)
-      setContributions(Array.isArray(res.data) ? res.data : [res.data])
-    } catch (err) {
-      console.error(err)
-      toast.error("Failed to fetch contributions")
-    } finally {
-      setLoading(false)
-    }
+  useEffect(() => {
+    if (!user) return
+const fetchContributions = async () => {
+  try {
+    const res = await axios.get(`http://localhost:5000/api/contributions/user/${user.email}`)
+    const contribs = Array.isArray(res.data) ? res.data : [res.data]
+
+    const issuesRes = await axios.get(`http://localhost:5000/api/issues`)
+    const issues = issuesRes.data
+
+    const contributionsWithCategory = contribs.map(c => {
+      const issue = issues.find(i => i._id === c.issueId)
+      return { ...c, category: issue?.category || "N/A" }
+    })
+
+    setContributions(contributionsWithCategory)
+  } catch (err) {
+    console.error(err)
+    toast.error("Failed to fetch contributions")
+  } finally {
+    setLoading(false)
   }
-  fetchContributions()
-}, [user])
+}
+    fetchContributions()
+  }, [user])
 
   const handleDownload = (contribution) => {
     const doc = new jsPDF()
@@ -43,34 +54,37 @@ useEffect(() => {
     doc.save(`Contribution_${contribution._id || Date.now()}.pdf`)
   }
 
-  if (loading) return <div className="mt-24 text-center">Loading...</div>
-  if (!contributions.length) return <div className="mt-24 text-center">No contributions yet</div>
+  if (loading) return <div className="mt-24 text-center text-gray-600">Loading...</div>
+  if (!contributions.length) return <div className="mt-24 text-center text-gray-600">No contributions yet</div>
 
   return (
     <div className="max-w-6xl mx-auto p-6 mt-24">
-      <h2 className="text-3xl font-bold mb-6">My Contributions</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 uppercase text-center">My Contributions</h2>
 
-      <div className="overflow-x-auto">
-        <table className="table w-full">
-          <thead>
+      {/* Desktop Table */}
+      <div className="overflow-x-auto hidden md:block">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-900">
             <tr>
-              <th>Issue Title</th>
-              <th>Category</th>
-              <th>Paid Amount</th>
-              <th>Date</th>
-              <th>Download Report</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Issue Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Paid Amount</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Download</th>
             </tr>
           </thead>
-          <tbody>
-            {contributions.map((c) => (
-              <tr key={c._id}>
-                <td>{c.issueTitle}</td>
-                <td>{c.category || "N/A"}</td>
-                <td>{c.amount}</td>
-                <td>{new Date(c.date).toLocaleDateString()}</td>
-                <td>
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            {contributions.map(c => (
+              <tr key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                <td className="px-6 py-4 whitespace-nowrap">{c.issueTitle}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">{c.category || "N/A"}</span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">${c.amount}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{new Date(c.date).toLocaleDateString()}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    className="btn btn-sm btn-primary"
+                    className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                     onClick={() => handleDownload(c)}
                   >
                     Download PDF
@@ -80,6 +94,29 @@ useEffect(() => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-4 space-y-4 md:hidden">
+        {contributions.map(c => (
+          <div key={c._id} className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col gap-2">
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{c.issueTitle}</h3>
+            <p className="text-gray-500 text-sm">
+              <span className="font-semibold">Category:</span> {c.category || "N/A"}
+            </p>
+            <p className="text-gray-500 text-sm">
+              <span className="font-semibold">Amount Paid:</span> ${c.amount}
+            </p>
+            <p className="text-gray-500 text-sm">
+              <span className="font-semibold">Date:</span> {new Date(c.date).toLocaleDateString()}
+            </p>
+            <button
+              className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition mt-2"
+              onClick={() => handleDownload(c)}
+            >
+              Download PDF
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   )
