@@ -62,13 +62,7 @@ npm run dev
 
 ---
 
-## 📸 Preview
 
-Add your screenshots here if you want. Example:
-
-```md
-![SpotlessCity Homepage](https://i.ibb.co/xyz12345/homepage.png)
-```
 
 ---
 
@@ -107,7 +101,7 @@ SpotlessCity-clint/
 
 **👤 Pritom Dey**  
 📍 Bangladesh | CST, Sweden Polytechnic Institute  
-💼 Fullstack Web Developer (React, Django, C++, Python)  
+ 
 📧 Email: `pritom1.2.zx@gmail.com`  
 🌐 [Live Project Link](https://cheery-alfajores-e69632.netlify.app/)
 
