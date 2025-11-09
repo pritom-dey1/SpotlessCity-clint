@@ -3,6 +3,7 @@ import { useParams } from "react-router"
 import { useAuth } from "../context/AuthContext"
 import axios from "axios"
 import { toast } from "react-hot-toast"
+import Spinner from "../Components/Global/Spinner"
 
 export default function IssueDetailPage() {
   const { id } = useParams()
@@ -55,7 +56,7 @@ export default function IssueDetailPage() {
     fetchContributors()
   }, [id])
 
-  if (loading) return <div className="mt-24 text-center">Loading...</div>
+  if (loading) return <div className="mt-24 text-center"><Spinner></Spinner></div>
   if (!issue) return <div className="mt-24 text-center">Issue not found</div>
 
   const totalCollected = contributors.reduce((sum, c) => sum + Number(c.amount || 0), 0)

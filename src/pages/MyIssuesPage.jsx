@@ -3,6 +3,7 @@ import axios from "axios"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../context/AuthContext"
 import { AiOutlineClose } from "react-icons/ai"
+import Spinner from "../Components/Global/Spinner"
 
 export default function MyIssuesPage() {
   const { user } = useAuth()
@@ -19,9 +20,11 @@ export default function MyIssuesPage() {
     description: "",
     status: "ongoing",
   })
-         useEffect(() => {
-        document.title = "My Issues | SpotlessCity"; 
-      }, []);
+
+  useEffect(() => {
+    document.title = "My Issues | SpotlessCity"
+  }, [])
+
   useEffect(() => {
     if (!user) return
     const fetchIssues = async () => {
@@ -87,50 +90,53 @@ export default function MyIssuesPage() {
     }
   }
 
-  if (loading) return <div className="mt-24 text-center text-gray-600">Loading...</div>
-  if (!issues.length) return <div className="mt-24 text-center text-gray-600">No issues found</div>
+  if (loading) return <div className="mt-24 text-center"><Spinner /></div>
+  if (!issues.length) return <div className="mt-24 text-center text-base-content/70">No issues found</div>
 
   const statusColor = (status) => {
-    switch(status) {
-      case "ongoing": return "bg-green-100 text-green-800"
-      case "ended": return "bg-red-100 text-red-800"
-      default: return "bg-gray-100 text-gray-800"
+    switch (status) {
+      case "ongoing": return "bg-success/10 text-success"
+      case "ended": return "bg-error/10 text-error"
+      default: return "bg-base-200 text-base-content"
     }
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 mt-24 shadow-md">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 uppercase text-center">My Issues</h2>
+    <div className="max-w-6xl mx-auto p-6 mt-24 shadow-md bg-base-100 rounded-lg">
+      <h2 className="text-3xl font-bold mb-6 text-base-content uppercase text-center">My Issues</h2>
 
+      {/* Desktop Table */}
       <div className="overflow-x-auto hidden md:block">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
+        <table className="min-w-full divide-y divide-base-300">
+          <thead className="bg-base-200">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Amount</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">Category</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">Amount</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-base-300">
             {issues.map(issue => (
-              <tr key={issue._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                <td className="px-6 py-4 whitespace-nowrap">{issue.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{issue.category}</td>
-                <td className="px-6 py-4 whitespace-nowrap">${issue.amount}</td>
+              <tr key={issue._id} className="hover:bg-base-200 transition">
+                <td className="px-6 py-4 whitespace-nowrap text-base-content">{issue.title}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-base-content">{issue.category}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-base-content">${issue.amount}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 rounded-full text-sm font-medium ${statusColor(issue.status)}`}>{issue.status}</span>
+                  <span className={`px-2 py-1 rounded-full text-sm font-medium ${statusColor(issue.status)}`}>
+                    {issue.status}
+                  </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap flex gap-2">
                   <button
-                    className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                    className="btn btn-success btn-sm"
                     onClick={() => openUpdateModal(issue)}
                   >
                     Update
                   </button>
                   <button
-                    className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                    className="btn btn-error btn-sm"
                     onClick={() => openDeleteModal(issue)}
                   >
                     Delete
@@ -142,25 +148,26 @@ export default function MyIssuesPage() {
         </table>
       </div>
 
+      {/* Mobile Cards */}
       <div className="mt-4 space-y-4 md:hidden">
         {issues.map(issue => (
-          <div key={issue._id} className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col gap-2">
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{issue.title}</h3>
-            <p className="text-gray-500 text-sm">{issue.description}</p>
+          <div key={issue._id} className="bg-base-100 shadow-md rounded-lg p-4 flex flex-col gap-2 border border-base-300">
+            <h3 className="text-lg font-semibold text-base-content">{issue.title}</h3>
+            <p className="text-sm text-base-content/70">{issue.description}</p>
             <div className="flex flex-wrap gap-2 text-sm mt-1">
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{issue.category}</span>
+              <span className="px-2 py-1 bg-info/10 text-info rounded-full">{issue.category}</span>
               <span className={`px-2 py-1 rounded-full ${statusColor(issue.status)}`}>{issue.status}</span>
-              <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">Budget: ${issue.amount}</span>
+              <span className="px-2 py-1 bg-warning/10 text-warning rounded-full">Budget: ${issue.amount}</span>
             </div>
             <div className="flex gap-2 mt-2">
               <button
-                className="flex-1 px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                className="flex-1 btn btn-success btn-sm"
                 onClick={() => openUpdateModal(issue)}
               >
                 Update
               </button>
               <button
-                className="flex-1 px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                className="flex-1 btn btn-error btn-sm"
                 onClick={() => openDeleteModal(issue)}
               >
                 Delete
@@ -170,16 +177,17 @@ export default function MyIssuesPage() {
         ))}
       </div>
 
+      {/* Update Modal */}
       {updateModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md relative">
+        <div className="fixed inset-0 bg-base-900/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-base-100 p-6 rounded-lg shadow-xl w-full max-w-md relative">
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              className="absolute top-3 right-3 text-base-content/70 hover:text-base-content"
               onClick={() => setUpdateModal(false)}
             >
               <AiOutlineClose size={20} />
             </button>
-            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">Update Issue</h3>
+            <h3 className="text-xl font-bold mb-4 text-base-content">Update Issue</h3>
             <form className="flex flex-col gap-3" onSubmit={handleUpdate}>
               <input
                 type="text"
@@ -238,17 +246,18 @@ export default function MyIssuesPage() {
         </div>
       )}
 
+      {/* Delete Modal */}
       {deleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-sm relative">
+        <div className="fixed inset-0 bg-base-900/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-base-100 p-6 rounded-lg shadow-xl w-full max-w-sm relative">
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              className="absolute top-3 right-3 text-base-content/70 hover:text-base-content"
               onClick={() => setDeleteModal(false)}
             >
               <AiOutlineClose size={20} />
             </button>
-            <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-gray-200">Delete Issue?</h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h3 className="text-xl font-bold mb-2 text-base-content">Delete Issue?</h3>
+            <p className="text-base-content/70">
               Are you sure you want to delete <strong>{selectedIssue?.title}</strong>?
             </p>
             <div className="flex justify-end gap-2 mt-4">

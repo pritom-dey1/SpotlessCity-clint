@@ -10,27 +10,26 @@ import { Typewriter } from "react-simple-typewriter";
 
 export default function BannerSection() {
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Swiper
         spaceBetween={30}
         effect={"fade"}
-        navigation={true}
+        navigation
         pagination={{ clickable: true }}
         modules={[EffectFade, Navigation, Pagination]}
-        className="mySwiper"
+        className="w-full"
       >
-        {/* Slide 1 */}
         <SwiperSlide>
-          <div className="relative">
+          <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh]">
             <img
               src="https://media.assettype.com/deccanherald%2F2024-08-28%2Fq0qgu0ic%2FCity%20officials%2C%20public%20representatives%20and%20citizens%20themselves%20took%20up%20brooms%20and%20participated%20in%20cleaning%20the%20city%20roads.?w=undefined&auto=format%2Ccompress&fit=max"
               alt="Clean City Drive"
-              className="w-full h-[600px] object-cover brightness-75"
+              className="w-full h-full object-cover brightness-75"
             />
 
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white bg-black/40 px-4">
+            <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white bg-black/40 px-4 sm:px-6 lg:px-12">
               <Fade direction="up" triggerOnce={false}>
-                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
                   <Typewriter
                     words={["Join the Clean City Movement"]}
                     loop={1}
@@ -40,10 +39,10 @@ export default function BannerSection() {
                     deleteSpeed={50}
                   />
                 </h2>
-                <p className="text-lg md:text-xl max-w-2xl mb-6">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-2xl mb-6">
                   Together, we can build a greener, cleaner and brighter future for our community.
                 </p>
-                <button className="bg-[#18ae50] px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition">
+                <button className="bg-[#18ae50] px-6 sm:px-8 py-2 sm:py-3 rounded-full font-semibold hover:bg-green-700 transition text-sm sm:text-base md:text-lg">
                   Get Involved
                 </button>
               </Fade>
@@ -53,26 +52,22 @@ export default function BannerSection() {
 
         {/* Slide 2 */}
         <SwiperSlide>
-          <div className="relative">
+          <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh]">
             <img
               src="https://www.royalgreenwich.gov.uk/sites/default/files/styles/freestyle_lg/public/2024-11/Leafing%20image%206%20%282%29.jpg?itok=BfyLYWIN"
               alt="Clean Drive Volunteers"
-              className="w-full h-[600px] object-cover brightness-75"
+              className="w-full h-full object-cover brightness-75"
             />
-
-  </div>
+          </div>
         </SwiperSlide>
 
-        {/* Slide 3 */}
         <SwiperSlide>
-          <div className="relative">
+          <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh]">
             <img
               src="https://gggi.org/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-16-at-12.18.11-PM.jpeg"
               alt="Eco-friendly initiatives"
-              className="w-full h-[600px] object-cover brightness-75"
+              className="w-full h-full object-cover brightness-75"
             />
-
-   
           </div>
         </SwiperSlide>
       </Swiper>

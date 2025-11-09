@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import IssueCard from "../components/Global/IssueCard"
 import { toast } from "react-hot-toast"
+import Spinner from "../Components/Global/Spinner"
 
 export default function AllIssuesPage() {
   const [issues, setIssues] = useState([])
@@ -43,7 +44,7 @@ export default function AllIssuesPage() {
     setFilteredIssues(temp)
   }, [categoryFilter, statusFilter, issues])
 
-  if (loading) return <div className="mt-24 text-center">Loading...</div>
+  if (loading) return <div className="mt-24 text-center"><Spinner></Spinner></div>
 
   return (
     <div className="max-w-7xl mx-auto mt-24 mb-24 px-5">

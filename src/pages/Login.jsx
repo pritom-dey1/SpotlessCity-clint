@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+ import { useEffect, useState } from "react"
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth, googleProvider } from "../Config/firebase.config.js"
 import Swal from "sweetalert2"
@@ -11,9 +11,11 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
-      useEffect(() => {
-    document.title = "Login | SpotlessCity"; 
-  }, []);
+
+  useEffect(() => {
+    document.title = "Login | SpotlessCity"
+  }, [])
+
   const handleLogin = async (e) => {
     e.preventDefault()
     if (!email || !password) {
@@ -27,7 +29,11 @@ export default function Login() {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password)
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+      const token = await user.getIdToken() // Firebase ID token (JWT)
+      localStorage.setItem("accessToken", token)
+
       Swal.fire({
         icon: "success",
         title: "Welcome Back 🎉",
@@ -35,6 +41,7 @@ export default function Login() {
         timer: 1500,
         showConfirmButton: false
       })
+
       navigate("/")
     } catch (err) {
       Swal.fire({
@@ -52,7 +59,11 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider)
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result.user
+      const token = await user.getIdToken()
+      localStorage.setItem("accessToken", token)
+
       Swal.fire({
         icon: "success",
         title: "Logged in with Google",

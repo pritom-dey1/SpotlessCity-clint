@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
 import { FaUsers, FaCheckCircle, FaExclamationCircle, FaClipboardList } from "react-icons/fa"
 
 export default function CommunityStats() {
@@ -22,38 +21,42 @@ export default function CommunityStats() {
     fetchStats()
   }, [])
 
-  if (loading) return <p className="text-center py-10">Loading stats...</p>
-  if (!stats) return <p className="text-center py-10 text-red-500">Failed to load stats</p>
+  if (loading) return <p className="text-center py-10 text-base-content">Loading stats...</p>
+  if (!stats) return <p className="text-center py-10 text-error">Failed to load stats</p>
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
       <h2 className="text-3xl md:text-4xl uppercase font-bold text-center mb-12">
-        Community <span className="text-[#18ae50]">Stats</span>
+        Community <span className="text-primary">Stats</span>
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
-          <FaUsers className="text-4xl text-[#18ae50] mx-auto mb-4" />
-          <h3 className="text-2xl font-bold">{stats.totalUsers}</h3>
-          <p className="text-gray-600">Registered Users</p>
+        {/* Registered Users */}
+        <div className="bg-base-100 shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
+          <FaUsers className="text-4xl text-primary mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-base-content">{stats.totalUsers}</h3>
+          <p className="text-base-content/70">Registered Users</p>
         </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
-          <FaClipboardList className="text-4xl text-blue-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold">{stats.totalIssues}</h3>
-          <p className="text-gray-600">Total Issues</p>
+        {/* Total Issues */}
+        <div className="bg-base-100 shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
+          <FaClipboardList className="text-4xl text-info mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-base-content">{stats.totalIssues}</h3>
+          <p className="text-base-content/70">Total Issues</p>
         </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
-          <FaCheckCircle className="text-4xl text-green-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold">{stats.resolved}</h3>
-          <p className="text-gray-600">Resolved</p>
+        {/* Resolved */}
+        <div className="bg-base-100 shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
+          <FaCheckCircle className="text-4xl text-success mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-base-content">{stats.resolved}</h3>
+          <p className="text-base-content/70">Resolved</p>
         </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
-          <FaExclamationCircle className="text-4xl text-red-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold">{stats.pending}</h3>
-          <p className="text-gray-600">Pending</p>
+        {/* Pending */}
+        <div className="bg-base-100 shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
+          <FaExclamationCircle className="text-4xl text-warning mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-base-content">{stats.pending}</h3>
+          <p className="text-base-content/70">Pending</p>
         </div>
       </div>
     </div>
