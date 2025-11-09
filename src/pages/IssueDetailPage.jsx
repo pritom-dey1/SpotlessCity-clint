@@ -88,7 +88,7 @@ export default function IssueDetailPage() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/contributions", contributionData)
+      await axios.post("https://city-server-sigma.vercel.app/api/contributions", contributionData)
       toast.success("Contribution added successfully")
       setModalOpen(false)
       setContributors((prev) => [...prev, contributionData])
