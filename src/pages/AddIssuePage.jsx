@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router"
 import { useAuth } from "../context/AuthContext"
 import axios from "axios"
 import { toast } from "react-hot-toast"
@@ -33,9 +33,9 @@ export default function AddIssuePage() {
     }
 
     try {
-      await axios.post("/api/issues", issueData)
+      await axios.post("http://localhost:5000/api/issues", issueData)
       toast.success("Issue added successfully")
-      navigate("/issues")
+      navigate("/")
     } catch (err) {
       console.error(err)
       toast.error("Failed to add issue")
