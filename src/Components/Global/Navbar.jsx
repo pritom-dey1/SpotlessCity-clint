@@ -8,18 +8,17 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { user, logout } = useAuth()
 
-  // initialize darkMode from localStorage (default false)
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   )
 
-  // apply theme whenever it changes
   useEffect(() => {
+    const html = document.querySelector("html")
     if (darkMode) {
-      document.documentElement.classList.add("dark")
+      html.setAttribute("data-theme", "dark")
       localStorage.setItem("theme", "dark")
     } else {
-      document.documentElement.classList.remove("dark")
+   html.setAttribute("data-theme", "light")
       localStorage.setItem("theme", "light")
     }
   }, [darkMode])
