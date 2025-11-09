@@ -23,7 +23,7 @@ export default function IssueDetailPage() {
   const [contributors, setContributors] = useState([])
           useEffect(() => {
     const fetchIssue = async () => {
-      const res = await axios.get(`http://localhost:5000/api/issues/${id}`);
+      const res = await axios.get(`https://city-server-sigma.vercel.app/api/issues/${id}`);
       setIssue(res.data);
       document.title = res.data.title + " | SpotlessCity"; 
     };
@@ -33,7 +33,7 @@ export default function IssueDetailPage() {
   useEffect(() => {
     const fetchIssue = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/issues/${id}`)
+        const res = await axios.get(`https://city-server-sigma.vercel.app/api/issues/${id}`)
         setIssue(res.data)
       } catch (err) {
         console.error(err)
@@ -45,7 +45,7 @@ export default function IssueDetailPage() {
 
     const fetchContributors = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/contributions/issue/${id}`)
+        const res = await axios.get(`https://city-server-sigma.vercel.app/api/contributions/issue/${id}`)
         setContributors(res.data)
       } catch (err) {
         console.error(err)

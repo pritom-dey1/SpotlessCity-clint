@@ -42,7 +42,7 @@ export default function BannerSection() {
                 <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-2xl mb-6">
                   Together, we can build a greener, cleaner and brighter future for our community.
                 </p>
-                <button className="bg-[#18ae50] px-6 sm:px-8 py-2 sm:py-3 rounded-full font-semibold hover:bg-green-700 transition text-sm sm:text-base md:text-lg">
+                <button className="btn btn-primary">
                   Get Involved
                 </button>
               </Fade>

@@ -7,9 +7,10 @@ import { toast } from "react-hot-toast"
 export default function AddIssuePage() {
   const { user } = useAuth()
   const navigate = useNavigate()
-    useEffect(() => {
-    document.title = "Add New Issue | SpotlessCity"; 
-  }, []);
+
+  useEffect(() => {
+    document.title = "Add New Issue | SpotlessCity"
+  }, [])
 
   const [formData, setFormData] = useState({
     title: "",
@@ -37,7 +38,7 @@ export default function AddIssuePage() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/issues", issueData)
+      await axios.post("https://city-server-sigma.vercel.app/api/issues", issueData)
       toast.success("Issue added successfully")
       navigate("/issues")
     } catch (err) {
@@ -47,80 +48,110 @@ export default function AddIssuePage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-24 mb-12 bg-base-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Add New Issue</h2>
+    <div className="min-h-screen bg-base-200 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        {/* Card */}
+        <div className="bg-base-100 rounded-xl shadow-lg p-6 sm:p-8 mt-15">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-base-content">
+            Add New Issue
+          </h2>
 
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Issue Title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-          className="input input-bordered w-full"
-        />
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {/* Title */}
+            <div>
+              <input
+                type="text"
+                name="title"
+                placeholder="Issue Title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+                className="input input-bordered w-full focus:ring-2 focus:ring-primary focus:border-primary transition"
+              />
+            </div>
 
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="select select-bordered w-full"
-        >
-          <option value="Garbage">Garbage</option>
-          <option value="Road">Road</option>
-          <option value="Water">Water</option>
-          <option value="Other">Other</option>
-        </select>
+            {/* Category */}
+            <div>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="select select-bordered w-full focus:ring-2 focus:ring-primary"
+              >
+                <option value="Garbage">Garbage</option>
+                <option value="Road">Road</option>
+                <option value="Water">Water</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
 
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={formData.location}
-          onChange={handleChange}
-          required
-          className="input input-bordered w-full"
-        />
+            {/* Location */}
+            <div>
+              <input
+                type="text"
+                name="location"
+                placeholder="Location (e.g., Dhaka, Mirpur 10)"
+                value={formData.location}
+                onChange={handleChange}
+                required
+                className="input input-bordered w-full focus:ring-2 focus:ring-primary"
+              />
+            </div>
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="textarea textarea-bordered w-full"
-        />
+            {/* Description */}
+            <div>
+              <textarea
+                name="description"
+                placeholder="Describe the issue in detail..."
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows={4}
+                className="textarea textarea-bordered w-full focus:ring-2 focus:ring-primary resize-none"
+              />
+            </div>
 
-        <input
-          type="text"
-          name="image"
-          placeholder="Image URL"
-          value={formData.image}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-        />
+            {/* Image URL */}
+            <div>
+              <input
+                type="text"
+                name="image"
+                placeholder="Image URL (optional)"
+                value={formData.image}
+                onChange={handleChange}
+                className="input input-bordered w-full focus:ring-2 focus:ring-primary"
+              />
+            </div>
 
-        <input
-          type="number"
-          name="amount"
-          placeholder="Suggested Fix Budget"
-          value={formData.amount}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-        />
+            <div>
+              <input
+                type="number"
+                name="amount"
+                placeholder="Suggested Fix Budget (BDT)"
+                value={formData.amount}
+                onChange={handleChange}
+                className="input input-bordered w-full focus:ring-2 focus:ring-primary"
+              />
+            </div>
 
-        <input
-          type="email"
-          value={user?.email || ""}
-          readOnly
-          className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
-        />
+            <div>
+              <input
+                type="email"
+                value={user?.email || ""}
+                readOnly
+                className="input input-bordered w-full bg-base-200 cursor-not-allowed text-base-content/70"
+              />
+            </div>
 
-        <button type="submit" className="mt-auto text-center bg-green-500 hover:bg-green-600 text-white px-7 py-3 rounded-md transition">
-          Submit Issue
-        </button>
-      </form>
+            <button
+              type="submit"
+              className="w-full btn btn-primary text-lg py-3 rounded-xl shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5"
+            >
+              Submit Issue
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   )
 }

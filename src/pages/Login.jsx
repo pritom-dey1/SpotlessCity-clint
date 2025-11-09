@@ -31,7 +31,7 @@ export default function Login() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
-      const token = await user.getIdToken() // Firebase ID token (JWT)
+      const token = await user.getIdToken() 
       localStorage.setItem("accessToken", token)
 
       Swal.fire({
@@ -84,7 +84,7 @@ export default function Login() {
   return (
     <div className="min-h-auto py-[5%] pt-[7%] flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-[600px]">
-        <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
+        <h2 className="text-3xl font-bold text-center text-primary mb-6">
           LOGIN HERE
         </h2>
 
@@ -123,7 +123,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+            className="btn btn-primary w-full"
           >
             Login
           </button>
@@ -132,7 +132,7 @@ export default function Login() {
         <div className="mt-4 text-center text-gray-600 dark:text-gray-300">
           <p>
             Don’t have an account?{" "}
-            <Link to="/register" className="text-green-600 hover:underline">
+            <Link to="/register" className="text-primary hover:underline">
               Register here
             </Link>
           </p>

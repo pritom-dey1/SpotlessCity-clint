@@ -22,10 +22,10 @@ export default function MyContributionPage() {
 
     const fetchContributions = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/contributions/user/${user.email}`)
+        const res = await axios.get(`https://city-server-sigma.vercel.app/api/contributions/user/${user.email}/`)
         const contribs = Array.isArray(res.data) ? res.data : res.data ? [res.data] : []
 
-        const issuesRes = await axios.get(`http://localhost:5000/api/issues`)
+        const issuesRes = await axios.get(`https://city-server-sigma.vercel.app/api/issues`)
         const issues = issuesRes.data
 
         const contributionsWithCategory = contribs.map(c => {

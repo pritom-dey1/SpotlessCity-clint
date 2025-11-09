@@ -8,7 +8,7 @@ export default function CommunityStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/stats")
+        const res = await fetch("https://city-server-sigma.vercel.app/api/stats")
         const data = await res.json()
         setStats(data)
       } catch (err) {

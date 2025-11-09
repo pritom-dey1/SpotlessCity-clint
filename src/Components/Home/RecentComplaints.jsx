@@ -10,7 +10,7 @@ export default function RecentComplaints() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/issues/latest") 
+      .get("https://city-server-sigma.vercel.app/api/issues/latest") 
       .then(res => {
         setIssues(res.data)
         setLoading(false)
