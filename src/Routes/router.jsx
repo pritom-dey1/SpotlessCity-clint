@@ -5,6 +5,8 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import AddIssuePage from "../pages/AddIssuePage";
 import AllIssuesPage from "../pages/AllIssuesPage";
+import IssueDetailPage from "../pages/IssueDetailPage";
+import MyIssuesPage from "../pages/MyIssuesPage";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +32,14 @@ export const router = createBrowserRouter([
             {
                 path : 'issues',
                 element : <AllIssuesPage></AllIssuesPage>
+            },
+            {
+                path : 'issues/:id',
+                element : <IssueDetailPage></IssueDetailPage>
+            },
+            {
+                path : 'my-issues',
+                element : <MyIssuesPage></MyIssuesPage>
             }
         ]
     }
