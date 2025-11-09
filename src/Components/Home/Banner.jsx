@@ -60,26 +60,7 @@ export default function BannerSection() {
               className="w-full h-[600px] object-cover brightness-75"
             />
 
-hite bg-black/40 px-4">
-              <Fade direction="up" triggerOnce={false}>
-                <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                  <Typewriter
-                    words={["Be a Community Hero"]}
-                    loop={1}
-                    cursor
-                    cursorStyle="|"
-                    typeSpeed={80}
-                    deleteSpeed={50}
-                  />
-                </h2>
-                <p className="text-lg md:text-xl max-w-2xl mb-6">
-                  Volunteer for our upcoming clean drive and make your area shine!
-                </p>
-                <button className="bg-[#18ae50] px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition">
-                  Join Now
-                </button>
-              </Fade>
-            </div>
+  </div>
         </SwiperSlide>
 
         {/* Slide 3 */}

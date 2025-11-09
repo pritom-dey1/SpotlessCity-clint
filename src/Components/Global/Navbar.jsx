@@ -6,7 +6,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(true) 
+  const [loggedIn, setLoggedIn] = useState(false) 
 
   useEffect(() => {
     if (darkMode) {
@@ -36,7 +36,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-md fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-5 py-3">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-5 py-5">
         <Link
           to="/"
           className="text-2xl font-bold text-green-600 dark:text-green-400"

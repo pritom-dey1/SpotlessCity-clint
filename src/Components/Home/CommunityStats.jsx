@@ -7,19 +7,23 @@ export default function CommunityStats() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/stats") // 
-      .then(res => {
-        setStats(res.data)
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/stats")
+        const data = await res.json()
+        setStats(data)
+      } catch (err) {
+        console.error("Error fetching stats:", err)
+      } finally {
         setLoading(false)
-      })
-      .catch(err => {
-        console.error(err)
-        setLoading(false)
-      })
+      }
+    }
+
+    fetchStats()
   }, [])
 
   if (loading) return <p className="text-center py-10">Loading stats...</p>
+  if (!stats) return <p className="text-center py-10 text-red-500">Failed to load stats</p>
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
