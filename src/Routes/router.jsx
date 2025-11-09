@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import AddIssuePage from "../pages/AddIssuePage";
+import AllIssuesPage from "../pages/AllIssuesPage";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
             {
                 path : 'add-issue',
                 element : <AddIssuePage></AddIssuePage>
+            },
+            {
+                path : 'issues',
+                element : <AllIssuesPage></AllIssuesPage>
             }
         ]
     }
