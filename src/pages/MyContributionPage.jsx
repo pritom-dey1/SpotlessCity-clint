@@ -9,22 +9,21 @@ export default function MyContributionPage() {
   const [contributions, setContributions] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!user) return
-    const fetchContributions = async () => {
-      try {
-        const res = await axios.get(`/api/contributions/user/${user.email}`)
-        setContributions(res.data)
-      } catch (err) {
-        console.error(err)
-        toast.error("Failed to fetch contributions")
-      } finally {
-        setLoading(false)
-      }
+useEffect(() => {
+  if (!user) return
+  const fetchContributions = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/contributions/user/${user.email}`)
+      setContributions(Array.isArray(res.data) ? res.data : [res.data])
+    } catch (err) {
+      console.error(err)
+      toast.error("Failed to fetch contributions")
+    } finally {
+      setLoading(false)
     }
-
-    fetchContributions()
-  }, [user])
+  }
+  fetchContributions()
+}, [user])
 
   const handleDownload = (contribution) => {
     const doc = new jsPDF()
