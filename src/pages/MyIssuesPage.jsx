@@ -19,13 +19,13 @@ export default function MyIssuesPage() {
     status: "ongoing",
   })
 
-  // Fetch user issues
   useEffect(() => {
     if (!user) return
     const fetchIssues = async () => {
       try {
-        const res = await axios.get(`/api/issues/user/${user.email}`)
-        setIssues(Array.isArray(res.data) ? res.data : [])
+        const res = await axios.get(`http://localhost:5000/api/issues`) 
+        const userIssues = res.data.filter(issue => issue.email === user.email)
+        setIssues(userIssues)
       } catch (err) {
         console.error(err)
         toast.error("Failed to fetch issues")
@@ -55,10 +55,10 @@ export default function MyIssuesPage() {
   const handleUpdate = async (e) => {
     e.preventDefault()
     try {
-      await axios.patch(`/api/issues/${selectedIssue._id}`, formData)
+      await axios.patch(`http://localhost:5000/api/issues/${selectedIssue._id}`, formData)
       toast.success("Issue updated successfully")
-      setIssues((prev) =>
-        prev.map((i) => (i._id === selectedIssue._id ? { ...i, ...formData } : i))
+      setIssues(prev =>
+        prev.map(i => (i._id === selectedIssue._id ? { ...i, ...formData } : i))
       )
       setUpdateModal(false)
     } catch (err) {
@@ -74,9 +74,9 @@ export default function MyIssuesPage() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api/issues/${selectedIssue._id}`)
+      await axios.delete(`http://localhost:5000/api/issues/${selectedIssue._id}`)
       toast.success("Issue deleted successfully")
-      setIssues((prev) => prev.filter((i) => i._id !== selectedIssue._id))
+      setIssues(prev => prev.filter(i => i._id !== selectedIssue._id))
       setDeleteModal(false)
     } catch (err) {
       console.error(err)
@@ -85,7 +85,6 @@ export default function MyIssuesPage() {
   }
 
   if (loading) return <div className="mt-24 text-center">Loading...</div>
-
   if (!issues.length) return <div className="mt-24 text-center">No issues found</div>
 
   return (
@@ -104,7 +103,7 @@ export default function MyIssuesPage() {
             </tr>
           </thead>
           <tbody>
-            {issues.map((issue) => (
+            {issues.map(issue => (
               <tr key={issue._id}>
                 <td>{issue.title}</td>
                 <td>{issue.category}</td>
@@ -139,9 +138,9 @@ export default function MyIssuesPage() {
               <input
                 type="text"
                 name="title"
-                placeholder="Title"
                 value={formData.title}
                 onChange={handleChange}
+                placeholder="Title"
                 className="input input-bordered w-full"
                 required
               />
@@ -161,43 +160,32 @@ export default function MyIssuesPage() {
               <input
                 type="number"
                 name="amount"
-                placeholder="Suggested Budget"
                 value={formData.amount}
                 onChange={handleChange}
+                placeholder="Suggested Budget"
                 className="input input-bordered w-full"
                 required
               />
               <textarea
                 name="description"
-                placeholder="Description"
                 value={formData.description}
                 onChange={handleChange}
+                placeholder="Description"
                 className="textarea textarea-bordered w-full"
                 required
               />
-              <div className="flex gap-2 items-center">
-                <label>Status:</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="select select-bordered"
-                >
-                  <option value="ongoing">Ongoing</option>
-                  <option value="ended">Ended</option>
-                </select>
-              </div>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="select select-bordered w-full"
+              >
+                <option value="ongoing">Ongoing</option>
+                <option value="ended">Ended</option>
+              </select>
               <div className="flex justify-end gap-2 mt-2">
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  onClick={() => setUpdateModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Save
-                </button>
+                <button type="button" className="btn btn-ghost" onClick={() => setUpdateModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary">Save</button>
               </div>
             </form>
           </div>
@@ -211,18 +199,8 @@ export default function MyIssuesPage() {
             <h3 className="text-xl font-bold mb-4">Delete Issue?</h3>
             <p>Are you sure you want to delete <strong>{selectedIssue.title}</strong>?</p>
             <div className="flex justify-end gap-2 mt-4">
-              <button
-                className="btn btn-ghost"
-                onClick={() => setDeleteModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-error"
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
+              <button className="btn btn-ghost" onClick={() => setDeleteModal(false)}>Cancel</button>
+              <button className="btn btn-error" onClick={handleDelete}>Delete</button>
             </div>
           </div>
         </div>
