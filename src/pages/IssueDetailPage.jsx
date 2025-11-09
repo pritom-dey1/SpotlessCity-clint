@@ -23,7 +23,7 @@ export default function IssueDetailPage() {
   useEffect(() => {
     const fetchIssue = async () => {
       try {
-       const res = await axios.get(`http://localhost:5000/api/issues/${id}`)
+        const res = await axios.get(`http://localhost:5000/api/issues/${id}`)
         setIssue(res.data)
       } catch (err) {
         console.error(err)
@@ -49,13 +49,24 @@ export default function IssueDetailPage() {
   if (loading) return <div className="mt-24 text-center">Loading...</div>
   if (!issue) return <div className="mt-24 text-center">Issue not found</div>
 
+  const totalCollected = contributors.reduce((sum, c) => sum + Number(c.amount || 0), 0)
+  const remainingAmount = issue.amount - totalCollected
+  const progressPercent = issue.amount ? Math.min((totalCollected / issue.amount) * 100, 100) : 0
+
   const handleChange = (e) => {
-    setContribution({ ...contribution, [e.target.name]: e.target.value })
+    let value = e.target.value
+    if (e.target.name === "amount") {
+      // Limit to remaining budget
+      if (Number(value) > remainingAmount) value = remainingAmount
+      if (Number(value) < 0) value = 0
+    }
+    setContribution({ ...contribution, [e.target.name]: value })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!user) return toast.error("You must be logged in to contribute")
+    if (!contribution.amount || Number(contribution.amount) <= 0) return
 
     const contributionData = {
       ...contribution,
@@ -63,10 +74,11 @@ export default function IssueDetailPage() {
       issueTitle: issue.title,
       email: user.email,
       date: new Date(),
+      image: user.photoURL || "https://via.placeholder.com/40"
     }
 
     try {
-     axios.post("http://localhost:5000/api/contributions", contributionData)
+      await axios.post("http://localhost:5000/api/contributions", contributionData)
       toast.success("Contribution added successfully")
       setModalOpen(false)
       setContributors((prev) => [...prev, contributionData])
@@ -77,49 +89,73 @@ export default function IssueDetailPage() {
     }
   }
 
-  const totalCollected = contributors.reduce((sum, c) => sum + Number(c.amount || 0), 0)
-  const progressPercent = issue.amount ? Math.min((totalCollected / issue.amount) * 100, 100) : 0
-
   return (
-    <div className="max-w-4xl mx-auto p-6 mt-24">
-      <div className="bg-base-100 p-6 rounded-lg shadow-md">
-        <img
-          src={issue.image || "https://via.placeholder.com/600x300"}
-          alt={issue.title}
-          className="w-full h-64 object-cover rounded-lg mb-4"
-        />
-        <h2 className="text-3xl font-bold mb-2">{issue.title}</h2>
-        <p className="text-sm text-gray-500 mb-1">
-          <strong>Category:</strong> {issue.category}
-        </p>
-        <p className="text-sm text-gray-500 mb-1">
-          <strong>Location:</strong> {issue.location}
-        </p>
-        <p className="text-sm text-gray-500 mb-1">
-          <strong>Date:</strong> {new Date(issue.date).toLocaleDateString()}
-        </p>
-        <p className="text-sm text-gray-500 mb-1">
-          <strong>Suggested Budget:</strong> {issue.amount || 0}
-        </p>
-        <p className="mt-4">{issue.description}</p>
+    <div className="max-w-7xl mx-auto p-6 mt-24 flex flex-col gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 bg-base-100 p-6 rounded-lg shadow-md">
+          <img
+            src={issue.image || "https://via.placeholder.com/600x300"}
+            alt={issue.title}
+            className="w-full h-64 object-cover rounded-lg mb-4"
+          />
+          <h2 className="text-3xl font-bold mb-2">{issue.title}</h2>
+          <p className="text-sm text-gray-500 mb-1"><strong>Category:</strong> {issue.category}</p>
+          <p className="text-sm text-gray-500 mb-1"><strong>Location:</strong> {issue.location}</p>
+          <p className="text-sm text-gray-500 mb-1"><strong>Date:</strong> {new Date(issue.date).toLocaleDateString()}</p>
+          <p className="text-sm text-gray-500 mb-1"><strong>Suggested Budget:</strong> {issue.amount || 0}</p>
+          <p className="mt-4">{issue.description}</p>
 
-        <div className="mt-4">
-          <label className="text-sm font-medium">Collected: {totalCollected} / {issue.amount}</label>
-          <progress className="progress w-full" value={progressPercent} max="100"></progress>
+          <div className="mt-4">
+            <label className="text-sm font-medium">Collected: {totalCollected} / {issue.amount}</label>
+            <progress className="progress w-full" value={progressPercent} max="100"></progress>
+          </div>
+
+          <button
+            className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition"
+            onClick={() => setModalOpen(true)}
+            disabled={remainingAmount <= 0} 
+          >
+            {remainingAmount <= 0 ? "Fully Funded" : "Pay Clean-Up Contribution"}
+          </button>
         </div>
 
-        <button
-          className="btn btn-primary mt-4"
-          onClick={() => setModalOpen(true)}
-        >
-          Pay Clean-Up Contribution
-        </button>
+        <div className="flex-1 bg-base-100 p-6 rounded-lg shadow-md overflow-x-auto">
+          <h3 className="text-2xl font-bold mb-4 text-center">Contributors</h3>
+          {contributors.length === 0 ? (
+            <p className="text-gray-500 text-center">No contributions yet.</p>
+          ) : (
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>Avatar</th>
+                  <th>Name</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contributors.map((c, idx) => (
+                  <tr key={idx}>
+                    <td>
+                      <img
+                        src={c.image || "https://via.placeholder.com/40"}
+                        alt={c.contributorName}
+                        className="w-10 h-10 rounded-full"
+                      />
+                    </td>
+                    <td>{c.contributorName}</td>
+                    <td>{c.amount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
 
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-base-100 p-6 rounded-lg shadow-lg w-full max-w-md relative">
-            <h3 className="text-xl font-bold mb-4">Contribute to {issue.title}</h3>
+            <h3 className="text-xl uppercase text-center font-bold mb-4">Contribute to {issue.title}</h3>
             <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -157,10 +193,12 @@ export default function IssueDetailPage() {
               <input
                 type="number"
                 name="amount"
-                placeholder="Contribution Amount"
+                placeholder={`Contribution Amount (Max: ${remainingAmount})`}
                 value={contribution.amount}
                 onChange={handleChange}
                 required
+                min="1"
+                max={remainingAmount}
                 className="input input-bordered w-full"
               />
               <textarea
@@ -178,7 +216,11 @@ export default function IssueDetailPage() {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition"
+                  disabled={!contribution.amount || Number(contribution.amount) <= 0 || Number(contribution.amount) > remainingAmount}
+                >
                   Submit
                 </button>
               </div>
@@ -186,40 +228,6 @@ export default function IssueDetailPage() {
           </div>
         </div>
       )}
-
-      <div className="mt-8">
-        <h3 className="text-2xl font-bold mb-4">Contributors</h3>
-        {contributors.length === 0 ? (
-          <p className="text-gray-500">No contributions yet.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  <th>Avatar</th>
-                  <th>Name</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contributors.map((c, idx) => (
-                  <tr key={idx}>
-                    <td>
-                      <img
-                        src={c.image || "https://via.placeholder.com/40"}
-                        alt={c.contributorName}
-                        className="w-10 h-10 rounded-full"
-                      />
-                    </td>
-                    <td>{c.contributorName}</td>
-                    <td>{c.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

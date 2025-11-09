@@ -15,6 +15,7 @@ export default function AddIssuePage() {
     description: "",
     image: "",
     amount: "",
+    status: "ongoing",
   })
 
   const handleChange = (e) => {
@@ -35,7 +36,7 @@ export default function AddIssuePage() {
     try {
       await axios.post("http://localhost:5000/api/issues", issueData)
       toast.success("Issue added successfully")
-      navigate("/")
+      navigate("/issues")
     } catch (err) {
       console.error(err)
       toast.error("Failed to add issue")
@@ -43,7 +44,7 @@ export default function AddIssuePage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-24 bg-base-100 rounded-lg shadow-md">
+    <div className="max-w-3xl mx-auto p-6 mt-24 mb-12 bg-base-100 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Add New Issue</h2>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -113,7 +114,7 @@ export default function AddIssuePage() {
           className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
         />
 
-        <button type="submit" className="btn btn-primary mt-4">
+        <button type="submit" className="mt-auto text-center bg-green-500 hover:bg-green-600 text-white px-7 py-3 rounded-md transition">
           Submit Issue
         </button>
       </form>

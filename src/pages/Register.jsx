@@ -96,9 +96,9 @@ navigate("/login")
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6 text-green-600 dark:text-green-400">
+    <div className="min-h-auto pt-[7%] pb-[5%] flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-[600px]">
+        <h2 className="text-2xl font-bold text-center mb-6 text-green-600 dark:text-green-400 uppercase">
           Create an Account
         </h2>
         <form onSubmit={handleRegister} className="space-y-4">

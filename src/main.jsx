@@ -5,9 +5,12 @@ import { RouterProvider } from "react-router";
 import { router } from "./Routes/router";
 import { AuthProvider } from "./context/AuthContext";
 
+import { Toaster } from "react-hot-toast"
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+        <Toaster position="top-right" reverseOrder={false} />
       <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
   </StrictMode>

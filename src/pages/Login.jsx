@@ -4,10 +4,12 @@ import { auth, googleProvider } from "../Config/firebase.config.js"
 import Swal from "sweetalert2"
 import { useNavigate, Link } from "react-router"
 import { FcGoogle } from "react-icons/fc"
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 
 export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
@@ -67,8 +69,8 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md">
+    <div className="min-h-auto py-[5%] pt-[7%] flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-[600px]">
         <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
           LOGIN HERE
         </h2>
@@ -87,17 +89,23 @@ export default function Login() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-gray-700 dark:text-gray-300 mb-1">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your password"
             />
+            <div
+              className="absolute top-1/2 left-[93%] translate-y-[20%] cursor-pointer text-gray-500"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+            </div>
           </div>
 
           <button

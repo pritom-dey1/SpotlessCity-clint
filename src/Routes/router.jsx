@@ -8,6 +8,7 @@ import AllIssuesPage from "../pages/AllIssuesPage";
 import IssueDetailPage from "../pages/IssueDetailPage";
 import MyIssuesPage from "../pages/MyIssuesPage";
 import MyContributionPage from "../pages/MyContributionPage";
+import PrivateRoute from "../Components/Global/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -28,7 +29,9 @@ export const router = createBrowserRouter([
             },
             {
                 path : 'add-issue',
-                element : <AddIssuePage></AddIssuePage>
+                element :<PrivateRoute>
+                     <AddIssuePage></AddIssuePage>
+                </PrivateRoute>
             },
             {
                 path : 'issues',
@@ -36,15 +39,15 @@ export const router = createBrowserRouter([
             },
             {
                 path : 'issues/:id',
-                element : <IssueDetailPage></IssueDetailPage>
+                element : <PrivateRoute><IssueDetailPage></IssueDetailPage></PrivateRoute>
             },
             {
                 path : 'my-issues',
-                element : <MyIssuesPage></MyIssuesPage>
+                element : <PrivateRoute> <MyIssuesPage></MyIssuesPage></PrivateRoute>
             },
             {
                 path : 'my-contributions',
-                element : <MyContributionPage></MyContributionPage>
+                element : <PrivateRoute><MyContributionPage></MyContributionPage></PrivateRoute>
             }
         ]
     }
