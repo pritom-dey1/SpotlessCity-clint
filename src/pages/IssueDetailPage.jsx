@@ -9,6 +9,7 @@ export default function IssueDetailPage() {
   const { user } = useAuth()
 
   const [issue, setIssue] = useState(null)
+  
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [contribution, setContribution] = useState({
@@ -19,6 +20,14 @@ export default function IssueDetailPage() {
     amount: "",
   })
   const [contributors, setContributors] = useState([])
+          useEffect(() => {
+    const fetchIssue = async () => {
+      const res = await axios.get(`http://localhost:5000/api/issues/${id}`);
+      setIssue(res.data);
+      document.title = res.data.title + " | SpotlessCity"; 
+    };
+    fetchIssue();
+  }, [id]);
 
   useEffect(() => {
     const fetchIssue = async () => {

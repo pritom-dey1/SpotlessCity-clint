@@ -19,7 +19,9 @@ export default function MyIssuesPage() {
     description: "",
     status: "ongoing",
   })
-
+         useEffect(() => {
+        document.title = "My Issues | SpotlessCity"; 
+      }, []);
   useEffect(() => {
     if (!user) return
     const fetchIssues = async () => {
@@ -97,7 +99,7 @@ export default function MyIssuesPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 mt-24">
+    <div className="max-w-6xl mx-auto p-6 mt-24 shadow-md">
       <h2 className="text-3xl font-bold mb-6 text-gray-800 uppercase text-center">My Issues</h2>
 
       <div className="overflow-x-auto hidden md:block">

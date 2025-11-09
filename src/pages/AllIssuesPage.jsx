@@ -10,7 +10,9 @@ export default function AllIssuesPage() {
   const [categoryFilter, setCategoryFilter] = useState("All")
   const [statusFilter, setStatusFilter] = useState("All")
   const [loading, setLoading] = useState(true)
-
+       useEffect(() => {
+    document.title = "All Issue | SpotlessCity"; 
+  }, []);
   useEffect(() => {
     const fetchIssues = async () => {
       try {

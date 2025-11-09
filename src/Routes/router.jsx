@@ -9,11 +9,13 @@ import IssueDetailPage from "../pages/IssueDetailPage";
 import MyIssuesPage from "../pages/MyIssuesPage";
 import MyContributionPage from "../pages/MyContributionPage";
 import PrivateRoute from "../Components/Global/PrivateRoute";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <HomeLayout></HomeLayout>,
+        errorElement : <NotFoundPage></NotFoundPage>,
         children : [
             {
                 index : true,

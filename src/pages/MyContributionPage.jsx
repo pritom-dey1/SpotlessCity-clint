@@ -9,7 +9,9 @@ export default function MyContributionPage() {
   const [contributions, setContributions] = useState([])
   console.log(contributions);
   const [loading, setLoading] = useState(true)
-
+        useEffect(() => {
+      document.title = "My Contributions | SpotlessCity"; 
+    }, []);
   useEffect(() => {
     if (!user) return
 const fetchContributions = async () => {

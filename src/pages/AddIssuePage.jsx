@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { useAuth } from "../context/AuthContext"
 import axios from "axios"
@@ -7,6 +7,9 @@ import { toast } from "react-hot-toast"
 export default function AddIssuePage() {
   const { user } = useAuth()
   const navigate = useNavigate()
+    useEffect(() => {
+    document.title = "Add New Issue | SpotlessCity"; 
+  }, []);
 
   const [formData, setFormData] = useState({
     title: "",

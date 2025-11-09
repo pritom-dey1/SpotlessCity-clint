@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import Swal from "sweetalert2"
 import { auth, googleProvider } from "../Config/firebase.config.js"
@@ -75,7 +75,9 @@ navigate("/login")
       })
     }
   }
-
+         useEffect(() => {
+        document.title = "Register | SpotlessCity"; 
+      }, []);
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider)

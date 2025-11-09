@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth, googleProvider } from "../Config/firebase.config.js"
 import Swal from "sweetalert2"
@@ -11,7 +11,9 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
-
+      useEffect(() => {
+    document.title = "Login | SpotlessCity"; 
+  }, []);
   const handleLogin = async (e) => {
     e.preventDefault()
     if (!email || !password) {
